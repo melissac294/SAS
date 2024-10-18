@@ -9,7 +9,7 @@
 %let ds=rates_healthdata_gov;
 
 /*setup access to external data*/
-filename cardio '/home/u63568107/Data/csv/Cardio_Data.csv';
+filename cardio '/home/u63568107/Data/csv/Cardiovascular_Disease_Death_Rates__Trends__and_Excess_Death_Rates_Among_US_Adults__35___by_County_and_Age_Group___2010-2020.csv';
 
 /*use DATA Step to prep data*/
 
@@ -50,7 +50,7 @@ run;
 */
 %macro run_max_val_states;
 %local i state_names getstate nextval;
-%let state_names = NC SC;
+%let state_names = NC SC VA;
 %let i=1;
 
 
@@ -68,12 +68,12 @@ data &ds._&getstate.;
 run;
 
 proc sort data=&ds._&getstate. out=&getstate._sorted;
- by Year descending Cardiovascular_Disease_Rate;
+ by Age_Group Year descending Cardiovascular_Disease_Rate;
 run;
 
 data &ds._&getstate._max;
     set &getstate._sorted; 
-    by Year;
+    by Age_Group Year descending Cardiovascular_Disease_Rate;
     keep Year Age_Group Cardiovascular_Disease_Rate Confidence_limit_Low Confidence_limit_High ;
 
 /*output the highest rate for each state and year*/
